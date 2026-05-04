@@ -1,0 +1,36 @@
+from core.cliente import Cliente
+from core.reserva import Reserva
+from servicios.reserva_sala import ReservaSala
+from servicios.alquiler_equipo import AlquilerEquipo
+from servicios.asesoria import AsesoriaEspecializada
+from utils.logger import registrar_error
+
+clientes = []
+reservas = []
+
+operaciones = [
+    lambda: Cliente("C1", "Ana", "123"),
+    lambda: Cliente("C2", "Luis", "456"),
+    lambda: Cliente("", "Error", "789"),
+]
+
+for operacion in operaciones:
+    try:
+        cliente = operacion()
+        clientes.append(cliente)
+        print(cliente.mostrar_info())
+    except Exception as e:
+        registrar_error(e)
+        print("Error registrado:", e)
+
+try:
+    sala = ReservaSala("S1", "Sala Premium", 100, 20)
+    equipo = AlquilerEquipo("E1", "Proyector", 50, "Audiovisual")
+    asesoria = AsesoriaEspecializada("A1", "Consultoría", 200, "Software")
+
+    reserva1 = Reserva(clientes[0], sala, 3)
+    reservas.append(reserva1)
+    print("Costo reserva:", reserva1.procesar())
+
+except Exception as e:
+    registrar_error(e)
